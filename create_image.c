@@ -45,10 +45,13 @@ int32_t load_bmp(int32_t *width, int32_t *height, int8_t *bmp){
 		if (	(bmpheader.fileid != 19778) ||
 			(bmpheader.imgoffset != 54) ||
 			(imgheader.headersize != 40) ||
-			(imgheader.numplanes != 1) ||
+			(imgheader.numplanes != 1 ) ||
 			(imgheader.pixeldepth != 24) ||
 			(imgheader.compression != 0)
 		){
+
+
+
 			printf("error: Invalid bitmap image.");
 			return -1;
 		};
@@ -99,7 +102,7 @@ int32_t main(int32_t argc, int8_t *argv[]){
 			}
 		}
 		printf("};\n");
-	
+
 		free(buffer_0);
 		free(buffer_1);
 		free(buffer_2);
@@ -107,4 +110,3 @@ int32_t main(int32_t argc, int8_t *argv[]){
 
 	return 0;
 }
-

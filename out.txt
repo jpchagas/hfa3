@@ -1,0 +1,260 @@
+make hal
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+mips-elf-as -mips1 -msoft-float -o crt0.o /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/boot/crt0.s
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/drivers/interrupt.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/drivers/hal.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/drivers/ni.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make libc
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/libc/libc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/libc/math.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/misc/crc.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+for i in 0 1 2 3 4 5 ; do \
+	echo "Building image for core $i.."; \
+	make noc CORE="$i" && \
+	make kernel CORE="$i" && \
+	make app CORE="$i" && \
+	mips-elf-ld  -mips1 --gc-sections -T/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/plasma.ld -o code$i.elf *.o && \
+	mips-elf-objdump --disassemble --reloc code$i.elf > code$i.lst && \
+	mips-elf-objdump -h code$i.elf > code$i.sec && \
+	mips-elf-objdump -s code$i.elf > code$i.cnt && \
+	mips-elf-objcopy -O binary code$i.elf code$i.bin && \
+	mips-elf-size code$i.elf && \
+	hexdump -v -e '4/1 "%02x" "\n"' code$i.bin > code$i.txt \
+;done
+Building image for core 0..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=0 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+Building image for core 1..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=1 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=1 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=1 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=1 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+Building image for core 2..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=2 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=2 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=2 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=2 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+Building image for core 3..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=3 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=3 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=3 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=3 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+Building image for core 4..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=4 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=4 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=4 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=4 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+Building image for core 5..
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=5 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/noc.c 
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=5 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+make[1]: Entering directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=5 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/kprintf.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/malloc.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/panic.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/mutex.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/semaphore.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/sync/condvar.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/queue.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/lib/list.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/task.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/scheduler.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/processor.c \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/kernel/main.c
+mips-elf-gcc -Wall -O2 -c -mips1 -mpatfree -mno-check-zero-division -msoft-float -fshort-double -ffreestanding -nostdlib -fomit-frame-pointer -G 0 -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../arch/mips/plasma/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../lib/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../sys/include -I /home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../drivers/noc/include -DCPU_SPEED=25000000 -DTIME_SLICE=10480 -DBIG_ENDIAN -fdata-sections -ffunction-sections -DKERN_VER=\"v2.17.03\" -DTICK_TIME=18  -DCPU_ID=5 -DCPU_ARCH=\"mips/plasma\" -DMAX_TASKS=30 -DMEM_ALLOC=3 -DHEAP_SIZE=500000 -DMUTEX_TYPE=0 -DFLOATING_POINT=0 -DKERNEL_LOG=0 -DNOC_INTERCONNECT -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_PACKET_SIZE=64 -DNOC_PACKET_SLOTS=64 -DDEBUG_PORT \
+	/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2/../../app/img_filter/filter.c
+make[1]: Leaving directory '/home/merlick/Desktop/embedded-systems/hfa3/hellfireos-master/platform/noc_3x2'
+makefile:28: recipe for target 'images' failed
+gcc -O2  -o mpsoc_sim ./source/mpsoc_sim.c ./source/noc.c -lm -DN_CORES=6 -DNOC_WIDTH=3 -DNOC_HEIGHT=2 -DNOC_BUFFER_SIZE=16 -DOS_PACKET_SIZE=64
+
+N-MIPS MPSoC Simulator
+Embedded Systems Group - GSE, PUCRS [2007 - 2011]
+
+Could not find at least one object file in ./objects/
+Files must be named code0.bin, code1.bin, code2.bin... in sequence

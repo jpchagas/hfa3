@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name="app">
+        <df name="block_resume_kill">
+          <in>brk.c</in>
+        </df>
+        <df name="cond_test1">
+          <in>cond_test1.c</in>
+        </df>
+        <df name="cond_test2">
+          <in>cond_test2.c</in>
+        </df>
+        <df name="coremark">
+          <df name="hf_risc">
+            <df name="run_satan">
+              <df name="coremark">
+              </df>
+              <df name="results">
+                <df name="1-Os">
+                </df>
+                <df name="2-O2">
+                </df>
+                <df name="3-O3">
+                </df>
+                <df name="4-O3extreme">
+                </df>
+              </df>
+            </df>
+            <in>core_portme.c</in>
+            <in>core_portme.h</in>
+          </df>
+          <df name="hf_riscv">
+            <df name="run_satan">
+              <df name="coremark">
+              </df>
+            </df>
+            <in>core_portme.c</in>
+            <in>core_portme.h</in>
+          </df>
+          <in>core_list_join.c</in>
+          <in>core_main.c</in>
+          <in>core_matrix.c</in>
+          <in>core_portme.c</in>
+          <in>core_portme.h</in>
+          <in>core_state.c</in>
+          <in>core_util.c</in>
+          <in>coremark.c</in>
+          <in>coremark.h</in>
+        </df>
+        <df name="dwt_filter">
+          <in>dwt97.c</in>
+        </df>
+        <df name="img_filter">
+          <in>filter.c</in>
+          <in>image.h</in>
+        </df>
+        <df name="lists">
+          <in>lists.c</in>
+        </df>
+        <df name="malloc_test">
+          <in>malloctest.c</in>
+        </df>
+        <df name="mutex_test1">
+          <in>mutex_test1.c</in>
+        </df>
+        <df name="noc_test">
+          <in>noc_test.c</in>
+        </df>
+        <df name="noc_test2">
+          <in>noc_test2.c</in>
+        </df>
+        <df name="noc_test3">
+          <in>noc_test3.c</in>
+        </df>
+        <df name="noc_test4">
+          <in>noc_test4.c</in>
+        </df>
+        <df name="queues">
+          <in>queues.c</in>
+        </df>
+        <df name="queues2">
+          <in>queues2.c</in>
+        </df>
+        <df name="ramdisk">
+          <in>ramdisk_test.c</in>
+        </df>
+        <df name="readers_writers">
+          <in>readers_writers.c</in>
+        </df>
+        <df name="rel">
+          <in>dynamic.c</in>
+          <in>rel.c</in>
+        </df>
+        <df name="sched_test1">
+          <in>sched_test1.c</in>
+        </df>
+        <df name="sched_test2">
+          <in>sched_test2.c</in>
+        </df>
+        <df name="sem_test1">
+          <in>sem_test1.c</in>
+        </df>
+        <df name="sem_test2">
+          <in>sem_test2.c</in>
+        </df>
+        <df name="spi_test">
+          <in>spi_test.c</in>
+        </df>
+        <df name="task_create_kill">
+          <in>create_kill.c</in>
+        </df>
+        <df name="test_double">
+          <in>test_double.c</in>
+        </df>
+        <df name="test_float">
+          <in>test_float.c</in>
+        </df>
+        <df name="ustack_raw">
+          <in>ustack_raw.c</in>
+        </df>
+        <df name="ustack_uudp">
+          <in>ustack_uudp.c</in>
+        </df>
+        <df name="ustack_uudp2">
+          <in>ustack_uudp.c</in>
+        </df>
+      </df>
+      <df name="arch">
+        <df name="arm">
+          <df name="versatilepb">
+            <df name="boot">
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+            </df>
+            <df name="include">
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+            </df>
+            <df name="lib">
+              <in>__aeabi_idiv.c</in>
+              <in>__aeabi_idivmod.S</in>
+              <in>__aeabi_uidiv.c</in>
+              <in>__aeabi_uidivmod.S</in>
+              <in>__ashldi3.c</in>
+              <in>__ashrdi3.c</in>
+              <in>__clzdi2.c</in>
+              <in>__clzsi2.c</in>
+              <in>__divdi3.c</in>
+              <in>__divsi3.c</in>
+              <in>__lshrdi3.c</in>
+              <in>__moddi3.c</in>
+              <in>__modsi3.c</in>
+              <in>__muldi3.c</in>
+              <in>__udivdi3.c</in>
+              <in>__udivmoddi4.c</in>
+              <in>__udivmodsi4.c</in>
+              <in>__udivsi3.c</in>
+              <in>__umoddi3.c</in>
+              <in>__umodsi3.c</in>
+            </df>
+          </df>
+        </df>
+        <df name="mips">
+          <df name="hf-risc">
+            <df name="boot">
+              <in>copy of crt0.s</in>
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>eth_enc28j60.c</in>
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+            </df>
+            <df name="include">
+              <in>eth_enc28j60.h</in>
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+            </df>
+          </df>
+          <df name="pic32mz_chipkit-wifire">
+            <df name="boot">
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+            </df>
+            <df name="include">
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+              <in>pic32mz.h</in>
+            </df>
+          </df>
+          <df name="pic32mz_starter-kit">
+            <df name="boot">
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>eth_enc28j60.c</in>
+              <in>ethernet.c</in>
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+            </df>
+            <df name="include">
+              <in>eth_enc28j60.h</in>
+              <in>ethernet.h</in>
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+              <in>pic32mz.h</in>
+            </df>
+          </df>
+          <df name="plasma">
+            <df name="boot">
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+              <in>ni.c</in>
+            </df>
+            <df name="include">
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+              <in>ni.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="riscv">
+          <df name="hf-riscv">
+            <df name="boot">
+              <in>crt0.s</in>
+            </df>
+            <df name="drivers">
+              <in>eth_enc28j60.c</in>
+              <in>hal.c</in>
+              <in>interrupt.c</in>
+            </df>
+            <df name="include">
+              <in>eth_enc28j60.h</in>
+              <in>hal.h</in>
+              <in>interrupt.h</in>
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="drivers">
+        <df name="block">
+          <df name="include">
+            <in>block.h</in>
+            <in>ramdisk.h</in>
+            <in>sdcard.h</in>
+          </df>
+          <in>ramdisk.c</in>
+          <in>sdcard.c</in>
+        </df>
+        <df name="char">
+        </df>
+        <df name="device">
+          <df name="include">
+            <in>device.h</in>
+          </df>
+          <in>device.c</in>
+        </df>
+        <df name="i2c">
+        </df>
+        <df name="noc">
+          <df name="include">
+            <in>noc.h</in>
+          </df>
+          <in>noc.c</in>
+        </df>
+        <df name="spi">
+          <df name="include">
+            <in>eeprom25lcxx.h</in>
+            <in>enc28j60.h</in>
+            <in>mcp23s17.h</in>
+            <in>spi.h</in>
+            <in>sram23lcxx.h</in>
+          </df>
+          <in>eeprom25lcxx.c</in>
+          <in>enc28j60.c</in>
+          <in>mcp23s17.c</in>
+          <in>spi.c</in>
+          <in>sram23lcxx.c</in>
+        </df>
+      </df>
+      <df name="fs">
+        <df name="include">
+          <in>uhfs.h</in>
+          <in>uhfs_ecodes.h</in>
+        </df>
+        <in>uhfs.c</in>
+      </df>
+      <df name="lib">
+        <df name="include">
+          <in>crc.h</in>
+          <in>libc.h</in>
+          <in>math.h</in>
+        </df>
+        <df name="libc">
+          <in>libc.c</in>
+          <in>math.c</in>
+        </df>
+        <df name="misc">
+          <in>crc.c</in>
+        </df>
+      </df>
+      <df name="net">
+        <df name="include">
+          <in>ustack.h</in>
+          <in>uudp.h</in>
+        </df>
+        <df name="ustack">
+          <in>arp.c</in>
+          <in>eth_netif.c</in>
+          <in>icmp.c</in>
+          <in>ip.c</in>
+          <in>udp.c</in>
+        </df>
+        <df name="uudp">
+          <in>uudp.c</in>
+        </df>
+      </df>
+      <df name="platform">
+        <df name="armversatile_demo">
+        </df>
+        <df name="chipkit_demo">
+        </df>
+        <df name="coremark">
+        </df>
+        <df name="hf-risc_enc28j60">
+        </df>
+        <df name="noc_3x2">
+        </df>
+        <df name="noc_3x3">
+        </df>
+        <df name="single_core">
+        </df>
+        <df name="single_core_ramdisk">
+        </df>
+        <df name="starter-kit_demo">
+        </df>
+        <df name="starter-kit_enc28j60">
+        </df>
+      </df>
+      <df name="sys">
+        <df name="include">
+          <in>condvar.h</in>
+          <in>ecodes.h</in>
+          <in>hellfire.h</in>
+          <in>kernel.h</in>
+          <in>kprintf.h</in>
+          <in>list.h</in>
+          <in>main.h</in>
+          <in>malloc.h</in>
+          <in>mutex.h</in>
+          <in>panic.h</in>
+          <in>processor.h</in>
+          <in>queue.h</in>
+          <in>scheduler.h</in>
+          <in>semaphore.h</in>
+          <in>task.h</in>
+        </df>
+        <df name="kernel">
+          <in>main.c</in>
+          <in>panic.c</in>
+          <in>processor.c</in>
+          <in>scheduler.c</in>
+          <in>task.c</in>
+        </df>
+        <df name="lib">
+          <in>kprintf.c</in>
+          <in>list.c</in>
+          <in>malloc.c</in>
+          <in>queue.c</in>
+        </df>
+        <df name="sync">
+          <in>condvar.c</in>
+          <in>mutex.c</in>
+          <in>semaphore.c</in>
+        </df>
+      </df>
+      <df name="usr">
+        <df name="doc">
+          <df name="doxygen">
+            <df name="html">
+              <df name="search">
+              </df>
+            </df>
+            <df name="latex">
+            </df>
+          </df>
+          <df name="license">
+          </df>
+        </df>
+        <df name="kprofiler">
+        </df>
+        <df name="sim">
+          <df name="hf_risc_sim">
+            <in>hf_risc_sim.c</in>
+          </df>
+          <df name="hf_riscv64_sim">
+            <in>hf_riscv64_sim.c</in>
+          </df>
+          <df name="hf_riscv_sim">
+            <in>cache.c</in>
+            <in>cache.h</in>
+            <in>hf_riscv_sim.c</in>
+            <in>hf_riscv_sim_cache.c</in>
+            <in>hf_riscv_sim_full.c</in>
+          </df>
+          <df name="mpsoc_sim">
+            <df name="objects">
+            </df>
+            <df name="reports">
+            </df>
+            <df name="source">
+              <in>mpsoc_sim.c</in>
+              <in>noc.c</in>
+              <in>noc.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="tools">
+          <df name="arm-toolchain">
+            <df name="gcc-4.9.3">
+            </df>
+            <df name="gcc-7.1.0">
+            </df>
+          </df>
+          <df name="mips-toolchain">
+            <in>hello.c</in>
+            <in>mips.c</in>
+          </df>
+          <df name="riscv-toolchain">
+          </df>
+        </df>
+      </df>
+    </df>
+  </logicalFolder>
+  <projectmakefile></projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>2</platform>
+      </toolsSet>
+      <compile>
+        <compiledirpicklist>
+          <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
+        </compiledirpicklist>
+        <compiledir>${AUTO_FOLDER}</compiledir>
+        <compilecommandpicklist>
+          <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
+        </compilecommandpicklist>
+        <compilecommand>${AUTO_COMPILE}</compilecommand>
+      </compile>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <rundir>.</rundir>
+        <buildfirst>false</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>
