@@ -13,7 +13,8 @@ cd ./hellfireos-master/usr/sim/mpsoc_sim/
 make noc_3x2
 ./mpsoc_sim 5 s
 cd ../../../../
-python parse_output.py ./hellfireos-master/usr/sim/mpsoc_sim/reports/out0.txt
-gcc create_bmp.c -o crbmp
-./crbmp
-display output.bmp
+#rm img_matrix_bmp.h
+#python parse_output.py ./hellfireos-master/usr/sim/mpsoc_sim/reports/out0.txt
+#gcc create_bmp.c -o crbmp
+#./crbmp
+#display output.bmp

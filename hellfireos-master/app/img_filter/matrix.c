@@ -61,12 +61,38 @@ void matrix_print_sub(uint8_t *a, int16_t h, int16_t w, int16_t k, int16_t l, in
 	* @param bw  Largura da sub-matriz.
   *
   */
-void crop_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw){
+void get_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw){
+
+	memset(b, 0, bh * bw);
+
 	printf("[crop] sub matrix is a %dx%d, line %d column %d\n", bh, bw, k, l);
+
 	int16_t i = 0;
-  int16_t bindex = 0;
+	int16_t bindex = 0;
+
+	uint8_t xi = 0, xe = 0;
+
+	// índice de coluna émenosr que o tamanho da imagem.
+	if(l < 0){
+		xi = 2;
+		l = 0;
+	}
+
+	// índice de coluna é maior que o tamanho da imagem
+	if(l+bw > w)
+		xe = 2;
+
+	// índice da linha menor que o tamanho da imagem..
+	if(k < 0){
+		bindex = 2 * bw;
+		k = 0;
+	}
+	// índice da linha maior que o tamanho da imagem..
+	if(k+bh > h)
+		bh -= 2;
+
 	while (i < bh){
-    memcpy(&b[bindex], &a[(i + k) * w + l], bw*sizeof(int));
+    memcpy(&b[bindex + xi], &a[(i + k) * w + l], (bw -xi - xe) );
 		i += 1;
     bindex += bw;
   }
@@ -90,7 +116,7 @@ void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int
  int16_t i = 0;
  int16_t bindex = 0;
  while (i < bh){
-   memcpy(&a[(i + k) * w + l], &b[bindex], bw*sizeof(int));
+   memcpy(&a[(i + k) * w + l], &b[bindex], bw);
    i += 1;
    bindex += bw;
  }
@@ -187,7 +213,7 @@ void set_matrix_borders(uint8_t *a, int16_t ah, int16_t aw, uint8_t *b, int16_t 
 //       if(w >= image_width){
 //           w = 2;
 //           h += block_height;
-// 
+//
 //           if(h >= image_height){
 //             break;
 //           }

@@ -1,7 +1,24 @@
-#ifndef _FILTER_H_
-#define _FILTER_H_
+//#ifndef _FILTER_H_
+//#define _FILTER_H_
 
 #include "image.h"
+
+#define BLOCK_WIDTH 3
+#define BLOCK_HEIGHT 3
+
+// Usado para gerencia dos blocos pelo mestre.
+struct data_info {
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+// Header usado na troca de mensagens.
+struct hdr_info {
+	int w;
+	int h;
+};
 
 uint8_t gaussian(uint8_t buffer[5][5]){
 	int32_t sum = 0, mpixel;
@@ -13,9 +30,11 @@ uint8_t gaussian(uint8_t buffer[5][5]){
 					{4, 9, 12, 9, 4},
 					{2, 4, 5, 4, 2}
 				};
-	for (i = 0; i < 5; i++)
-		for (j = 0; j < 5; j++)
+	for (i = 0; i < 5; i++){
+		for (j = 0; j < 5; j++){
 			sum += ((int32_t)buffer[i][j] * (int32_t)kernel[i][j]);
+		}
+	}
 	mpixel = (int32_t)(sum / 159);
 
 	return (uint8_t)mpixel;
@@ -110,210 +129,287 @@ void do_sobel(uint8_t *input, uint8_t *output, int32_t width, int32_t height){
 	}
 }
 
-// uint16_t myAtoi(uint8_t *str)
-// {
-//     uint16_t res = 0; // Initialize result
-// 		uint32_t i = 0;
-//
-//     // Iterate through all characters of input string and
-//     // update result
-//     for (i; str[i] != '\0'; ++i)
-//         res = res*10 + str[i] - '0';
-//
-//     // return result.
-//     return res;
-// }
+void print_image(uint8_t *final_image){
+		int i=0, k = 0, j=0;
 
-void task_slave(void){
-	uint32_t i, j, k = 0, sub_width, sub_height;
-	uint8_t *sub_image, *img, *img2;
-	uint32_t time;
-	uint16_t cpu, task, size, val;
+		printf("\n\nint32_t width = %d, height = %d;\n", width, height);
 
-	sub_width = width;
-	sub_height = height;
-
-	printf("Teste3!!\n\n");
-
-	uint8_t *port = (uint8_t *)hf_selfname();
-
-	sub_image = (uint8_t *) malloc(sub_width * sub_height);
-
-	if (hf_comm_create(hf_selfid(), atoi(port), 0))
-		panic(0xff);
-
-	delay_ms(50);
-
-	while(1) {
-
-		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
-		if (val)
-			printf("error %d\n", val);
-		else
-			printf("[t3] %s (%d bytes)\n", sub_image, size);
-
-		printf("Teste4!!\n\n");
-
-		img = (uint8_t *) malloc(sub_height * sub_width);
-		img2 = (uint8_t *) malloc(sub_height * sub_width);
-		if (img == NULL || img2 == NULL){
-			printf("\nmalloc() failed!\n");
-			for(;;);
-		}
-
-		//printf("\n\nstart of processing!\n\n");
-
-		time = _readcounter();
-
-		do_gaussian(sub_image, img, sub_width, sub_height);
-		do_sobel(img, img2, sub_width, sub_height);
-
-		time = _readcounter() - time;
-
-		printf("done in %d clock cycles.\n\n", time);
-
-		/*
-		printf("\n\nint32_t width = %d, height = %d;\n", sub_width, sub_height);
+		// Joga imagem na tela (hex dump).
 		printf("uint8_t image[] = {\n");
-		for (i = 0; i < sub_height; i++){
-			for (j = 0; j < sub_width; j++){
-				printf("0x%x", img2[i * sub_width + j]);
-				if ((i < sub_height-1) || (j < sub_width-1)) printf(", ");
+		for (i = 0; i < height; i++){
+			for (j = 0; j < width; j++){
+
+				printf("0x%x", final_image[i * width + j]);
+				if ((i < height-1) || (j < width-1)) printf(", ");
 				if ((++k % 16) == 0) printf("\n");
+
 			}
 		}
 		printf("};\n");
-*/
 
-		val = hf_sendack(1, 1002, img2, size, 0, 500);
-		if (val){
-			printf("sender, hf_sendack(): error %d\n", val);
+}
+
+uint8_t next_data(uint8_t *bag, uint8_t *x, uint8_t *y, uint8_t *w, uint8_t *h){
+
+	// Armazena informações sobre o bloco de dados
+	struct data_info *d = (struct data_info*)bag;
+	d->x = *x;
+	d->y = *y;
+	d->w = *w;
+	d->h = *h;
+
+	uint8_t diff = 0;
+
+	*x += *w;
+
+	if(*x >= width){
+		*x = 0;
+		// trata y
+		*y += *h;
+		*w = BLOCK_WIDTH;
+
+		if(*y >= height){
+
+		}else{
+			 diff = height - *y;
+			// Diferença é menor que um bloco.
+			if(diff < 2*BLOCK_HEIGHT)
+				*h = diff;
 		}
+	}else{
+		diff = width - *x;
+		// Diferença é menor que um bloco.
+		if(diff < 2*BLOCK_WIDTH)
+			*w = diff;
+	}
 
-		free(img);
-		free(img2);
+}
 
-		printf("\n\nend of processing!\n");
+void master(void){
+
+	uint32_t i, j, k = 0;
+
+	uint32_t time;
+	uint16_t cpu, task, size, val;
+
+	if(hf_comm_create(hf_selfid(), 1000, 0))
+		panic(0xff);
+
+	delay_ms(80);
+
+	uint8_t *final_image = malloc(width * height);
+
+	uint8_t *sub_image = malloc(width * height * 4 + sizeof(struct hdr_info));
+
+	// Total de sub-imagens a serem processadas (total de blocos).
+	uint8_t total_sub_imgs = (width / BLOCK_WIDTH) * (height / BLOCK_HEIGHT);
+
+	// Informações sobre localização dos dados = (x, y, w, h)
+	uint8_t *bag = malloc(total_sub_imgs * 4);
+	uint8_t bag_offset = 0;
+	// Informações sobre quem está com qual dado. O índice corresponde a tarefa e o valor ao id do dado.
+	uint8_t *bag_control[4];
+	// Índice para o bloco de dados atual.
+	uint8_t actual_data_block = 0;
+
+	// Inicia contagem do tempo de execução.
+	time = _readcounter();
+
+	uint8_t x = 0, y = 0;
+  uint8_t w = BLOCK_WIDTH, h = BLOCK_HEIGHT;
+
+	// Envia primeira rajada de dados. Os próximos dados são enviado.
+	for(i=1; i<3; i++){
+
+		if(actual_data_block < total_sub_imgs){
+
+			printf("x: %d y: %d h:%d w:%d\n", x, y, h, w);
+
+			memset(sub_image, 0, (h+4) * (w+4) + sizeof(struct hdr_info));
+
+			struct hdr_info *hr = (struct hdr_info*)sub_image;
+			hr->w = w;
+			hr->h = h;
+
+			// Faz o recorte da imagem.
+			get_sub_matrix(image, sub_image + sizeof(struct hdr_info), height, width, y-2, x-2, h+4, w+4);
+			matrix_print(sub_image + sizeof(struct hdr_info), h+4, w+4);
+
+			// Envia dados a serem processados.
+			printf("Enviando bloco %d ...\n", actual_data_block);
+
+			val = hf_sendack(i, 1000, sub_image, (h+4) * (w+4) + sizeof(struct hdr_info), 0, 500);
+			//if (val)
+			//	printf("sender, hf_sendack(): error %d\n", val);
+
+			// Atualiza constrole de qual tarefa está atribuido cada dado.
+			bag_control[i] = actual_data_block;
+
+			// Atualiza bag e variáveis.
+			next_data(bag + bag_offset, &x, &y, &w, &h);
+			actual_data_block++;
+			bag_offset += sizeof(struct data_info);
+
+		}
+	}
+
+	int received = 0;
+
+	matrix_print(final_image, height, width);
+
+	// Loop principal. Espera por respostas e envia mais trabalho para os escravos.
+	while(1) {
+
+		// Recebe os dados processados de um escravo.
+		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
+		if (val)
+			printf("error %d\n", val);
+
+		printf("Pacote recebido ...\n");
+		struct hdr_info *hr = (struct hdr_info*)sub_image;
+		matrix_print(sub_image + sizeof(struct hdr_info), hr->h, hr->w);
+
+		// Busca informações da localização da sub-imagem.
+		int block_index = bag_control[cpu];
+		struct data_info *dt_hr = (struct data_info*)(bag + block_index * sizeof(struct data_info));
+
+		printf("idx %d x %d y %d h %d w %d \n", block_index, dt_hr->x, dt_hr->y, dt_hr->h, dt_hr->w);
+
+		// Atribui a sub-imagem a sua devida posicao na imagem.
+		set_sub_matrix(final_image, sub_image+sizeof(struct hdr_info), height, width, dt_hr->y, dt_hr->x, dt_hr->h, dt_hr->w);
+
+		matrix_print(final_image, height, width);
+
+		received++;
+		// Verifica se já recebeu todos os pacotes necessários.
+		if(received == total_sub_imgs)
+			break;
+
+		if(actual_data_block < total_sub_imgs)
+
+			// Se existe bloco a ser enviado.
+			// Pega o próximo bloco disponívvel e envia para o escravo.
+			printf("Enviandopacote com o bloco %d ...\n", actual_data_block);
+			printf("x: %d y: %d h:%d w:%d\n", x, y, h, w);
+
+			hr = (struct hdr_info*)sub_image;
+			hr->w = w;
+			hr->h = h;
+
+			// Faz o recorte da imagem.
+			get_sub_matrix(image, sub_image + sizeof(struct hdr_info), height, width, y-2, x-2, h+4, w+4);
+			matrix_print(sub_image + sizeof(struct hdr_info), h+4, w+4);
+
+			val = hf_sendack(cpu, 1000, sub_image, (h+4) * (w+4) + sizeof(struct hdr_info), 0, 500);
+			if (val)
+				printf("sender, hf_sendack(): error %d\n", val);
+
+			// Atualiza constrole de qual tarefa está atribuido cada dado.
+			// O índice corresponde a tarefa e o valor ao id do dado.
+			bag_control[cpu] = actual_data_block;
+
+			// Atualiza bag e variáveis.
+			next_data(bag+bag_offset, &x, &y, &w, &h);
+			actual_data_block++;
+			bag_offset += sizeof(struct data_info);
+	}
+
+	// Finaliza o calculo do tempo de execução.
+	time = _readcounter() - time;
+	printf("done in %d clock cycles.\n\n", time);
+
+	// Desenha imagem na tela.
+	print_image(final_image);
+
+	printf("\n\nFim do processamento!\n");
+	panic(0);
+
+}
+
+void slave(void){
+	uint32_t i;
+	uint32_t time;
+	uint16_t cpu, task, size, val;
+
+	// Inicializa porta 1000.
+	if (hf_comm_create(hf_selfid(), 1000, 0)){
+		panic(0xff);
+	}
+
+	uint8_t image_size = height * width * 4;
+
+	// Aloca espaço para recebimento dos dados.
+	uint8_t *sub_image = malloc(image_size);
+
+	// Aloca espaço de memória para as imagem intermediária.
+	uint8_t *sub_image_aux = malloc(image_size);
+
+	if (sub_image_aux == NULL){
+		printf("\nmalloc() failed!\n");
 		panic(0);
 	}
 
-}
+	while(1) {
 
-void task_master(void){
-	uint16_t i, j, k = 0;
-	uint16_t block_height_std, block_width_std, block_height_rem, block_width_rem, current_height, current_width;
-	uint16_t cpu, task, size, val;
+		// Recebe os dados.
+		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
+		//if (val)
+		//	printf("error %d\n", val);
+		//else
+		//	printf("[master] %s (%d bytes)\n", sub_image, size);
 
-	if(hf_comm_create(hf_selfid(), 1002, 0))
-		panic(0xff);
+		// TODO Faz processamento dos dados.
 
-	delay_ms(50);
+		struct hdr_info *hr = (struct hdr_info*)sub_image;
 
-	uint8_t *image2 = (uint8_t *) malloc((height + 4) * (width + 4));
+		printf("Recebido bloco com dimensoes h = %d e w = %d\n", hr->h+4, hr->w+4);
 
-	printf("Teste2!!\n\n");
+		matrix_print(sub_image + sizeof(struct hdr_info), hr->h+4, hr->w+4);
 
-	//set_matrix_borders(image, height, width, image2, height + 4, width + 4);
+		// Aplica filtros na imagem.
+		// Note também o uso das imagens intermediárias.
 
-	printf("Teste7!!\n\n");
+		// TODO Aplica filtros na imagem.
 
-	block_height_std = height / NOC_HEIGHT;
-	block_width_std = width / NOC_WIDTH;
-	block_height_rem = block_height_std + height % NOC_HEIGHT;
-	block_width_rem = block_width_std + width % NOC_WIDTH;
+		//do_gaussian(sub_image, sub_image_aux, width, height);
+		//do_sobel(sub_image_aux, sub_image, width, height);
 
-	int16_t w = 2;
-  int16_t h = 2;
+		uint8_t *temp_matrix = malloc((hr->h+4) * (hr->w+4) + sizeof(struct hdr_info));
 
+		memset(temp_matrix, hf_selfid(), (hr->h+4) * (hr->w+4) + sizeof(struct hdr_info));
 
-	for(i=0; i< NOC_WIDTH*NOC_HEIGHT; i++){
-			if (i < NOC_WIDTH) {
-				current_height = block_height_rem;
-			} else {
-				current_height = block_height_std;
-			}
+		memcpy(temp_matrix, sub_image, sizeof(struct hdr_info));
 
-			if ((i + 1) % NOC_WIDTH == 0) {
-				current_width = block_width_rem;
-			} else {
-				current_width = block_width_std;
-			}
+		// Retira as bordas da imagem.
+		//get_sub_matrix(sub_image + sizeof(struct hdr_info), temp_matrix + sizeof(struct hdr_info), hr->h+4, hr->w+4, 2, 2, hr->h, hr->w);
 
-			uint8_t *d = (uint8_t *)malloc((current_width + 4) * (current_width + 4));
+		matrix_print(temp_matrix + sizeof(struct hdr_info), hr->h, hr->w);
 
-			crop_sub_matrix(image2, d, height+4, width+4, h-2, w-2, current_height+4, current_width+4);
-			//matrix_print(d, block_height+4, block_width+4);
-
-			if(i == 0){
-				val = hf_sendack(i, 1001, image, (current_height * current_width), 0, 500);
-			} else{
-				val = hf_sendack(i, i*1000, image, (current_height * current_width), 0, 500);
-			}
-
-			printf("Teste6!!\n\n");
-
-			//printf("\n\n");
-
-			w += current_width;
-
-			if(w >= width){
-					w = 2;
-					h += current_height;
-
-					if(h >= height){
-						break;
-					}
-			}
+		// Envia dados processados.
+		val = hf_sendack(0, 1000, temp_matrix, hr->h * hr->w + sizeof(struct hdr_info), 0, 500);
+		//if (val){
+		//	printf("sender, hf_sendack(): error %d\n", val);
+		//}
 
 	}
 
-	printf("Teste5!!\n\n");
+	free(sub_image_aux);
+	panic(0);
 
-	// val = hf_sendack(1, 2000, image, (height * width), 0, 500);
-	for(i=0; i< NOC_WIDTH*NOC_HEIGHT; i++){
-		if(i == 0){
-			val = hf_recvack(&cpu, &task, d, &size, 0);
-		} else if(i == 1){
-			val = hf_recvack(&cpu, &task, d, &size, 0);
-		} else{
-			val = hf_recvack(&cpu, &task, d, &size, 0);
-		}
-
-		printf("Recebeu alguma coisa do %d!!\n\n", cpu);
-
-		//set_sub_matrix(image, d, height, width, )
-
-		//void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw);
-
-
-	}
-
-	printf("Teste!!\n\n");
-
-	printf("\n\nint32_t width = %d, height = %d;\n", width, height);
-	printf("uint8_t image[] = {\n");
-	for (i = 0; i < height; i++){
-		for (j = 0; j < width; j++){
-			printf("0x%x", image[i * width + j]);
-			if ((i < height-1) || (j < width-1)) printf(", ");
-			if ((++k % 16) == 0) printf("\n");
-		}
-	}
-	printf("};\n");
 }
 
 void app_main(void) {
-	int8_t buf[20];
-	sprintf(buf, "%d", (hf_cpuid()*1000));
-
-	if (hf_cpuid() == 1){
-		hf_spawn(task_master, 0, 0, 0, "master", 2048);
-	}
-	if (hf_cpuid() == 0){
-		hf_spawn(task_slave, 0, 0, 0, "1001", 2048);
-	} else {
-		hf_spawn(task_slave, 0, 0, 0, buf, 2048);
+	if(hf_cpuid() == 0){
+		hf_spawn(master, 0, 0, 0, "master", 2048);
+	}else if(hf_cpuid() == 1){
+		hf_spawn(slave, 0, 0, 0, "slave1", 2048);
+	}else if(hf_cpuid() == 2){
+		hf_spawn(slave, 0, 0, 0, "slave2", 2048);
+	}else if(hf_cpuid() == 3){
+		hf_spawn(slave, 0, 0, 0, "slave3", 2048);
+	}else if(hf_cpuid() == 4){
+		hf_spawn(slave, 0, 0, 0, "slave4", 2048);
 	}
 }
 
-#endif
+//#endif

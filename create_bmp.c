@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdint.h>
-#include "filter_image.h"
+#include "img_matrix_bmp.h"
 
 int32_t save_bmp(char bmp[]){
 	struct bmpinfoheader{
@@ -81,5 +81,5 @@ int32_t main(){
 	save_bmp("output.bmp");
 
 	return 0;
-	
+
 }
