@@ -1,7 +1,9 @@
 #include "image.h"
 
-#define BLOCK_WIDTH 3
-#define BLOCK_HEIGHT 3
+#define DEBUG_MODE
+
+#define BLOCK_WIDTH 32
+#define BLOCK_HEIGHT 32
 
 #define TOTAL_SLAVES 5
 
@@ -164,13 +166,12 @@ uint8_t next_data(uint8_t *bag, uint8_t offset, uint8_t *x, uint8_t *y, uint8_t 
 	d->w = *w;
 	d->h = *h;
 
-	printf("%d %d %d %d", d->x, d->y, d->w, d->h);
-
 	uint8_t diff = 0;
 
 	*x += *w;
 
 	if(*x >= width){
+		printf("----------------_> x Ultrapssou\n\n");
 		*x = 0;
 		// trata y
 		*y += *h;
@@ -179,16 +180,23 @@ uint8_t next_data(uint8_t *bag, uint8_t offset, uint8_t *x, uint8_t *y, uint8_t 
 		if(*y >= height){
 
 		}else{
-			 diff = height - *y;
+			 diff = height - (*y);
 			// Diferença é menor que um bloco.
-			if(diff < 2*BLOCK_HEIGHT)
+			if(diff < BLOCK_HEIGHT)
 				*h = diff;
 		}
 	}else{
-		diff = width - *x;
+
+		printf("%d %d\n", width, (*x));
+
+		diff = width - (*x);
+
 		// Diferença é menor que um bloco.
-		if(diff < 2*BLOCK_WIDTH)
+		if(diff < BLOCK_WIDTH){
+			printf("------------------> Dif pequena %d %d %d  \n", width, *x, diff);
 			*w = diff;
+
+		}
 	}
 
 }
@@ -215,7 +223,6 @@ void master(void){
 	printf("Total de sub-imagens para processamento: %d\n", total_sub_imgs);
 
 	// Informações sobre localização dos dados = (x, y, w, h)
-	printf("Criando de tamanho %d\n", total_sub_imgs * sizeof(struct data_info));
 	uint8_t *bag = malloc(total_sub_imgs * sizeof(struct data_info));
 	uint8_t bag_offset = 0;
 	// Informações sobre quem está com qual dado. O índice corresponde a tarefa e o valor ao id do dado.
@@ -240,16 +247,16 @@ void master(void){
 			hr->w = w;
 			hr->h = h;
 
-			// Envia dados a serem processados.
-			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, i);
-
 			// Faz o recorte da imagem.
 			get_sub_matrix(image, sub_image + sizeof(struct hdr_info), height, width, y-2, x-2, h+4, w+4);
+
+			#ifdef DEBUG_MODE
+			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, i);
 			matrix_print(sub_image + sizeof(struct hdr_info), h+4, w+4);
+			#endif
 
 			val = hf_sendack(i, 1000, sub_image, (h+4) * (w+4) + sizeof(struct hdr_info), 0, 500);
-			//if (val)
-			//	printf("sender, hf_sendack(): error %d\n", val);
+			if (val) printf("sender, hf_sendack(): error %d\n", val);
 
 			// Atualiza constrole de qual tarefa está atribuido cada dado.
 			bag_control[i] = actual_data_block;
@@ -269,7 +276,6 @@ void master(void){
 	// Loop principal. Espera por respostas e envia mais trabalho para os escravos.
 	while(1) {
 
-		printf("\n\nRecebendo bloco ...\n");
 
 		// Recebe os dados processados de um escravo.
 		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
@@ -277,7 +283,11 @@ void master(void){
 			printf("error %d\n", val);
 
 		struct hdr_info *hr = (struct hdr_info*)sub_image;
+
+		#ifdef DEBUG_MODE
+		printf("\n\nRecebendo bloco ...\n");
 		matrix_print(sub_image + sizeof(struct hdr_info), hr->h, hr->w);
+		#endif
 
 		// Busca informações da localização da sub-imagem.
 		uint8_t block_index = bag_control[cpu];
@@ -285,7 +295,10 @@ void master(void){
 
 		// Atribui a sub-imagem a sua devida posicao na imagem.
 		set_sub_matrix(final_image, sub_image+sizeof(struct hdr_info), height, width, dt_hr->y, dt_hr->x, dt_hr->h, dt_hr->w);
+
+		#ifdef DEBUG_MODE
 		matrix_print(final_image, height, width);
+		#endif
 
 		received++;
 		// Verifica se já recebeu todos os pacotes necessários.
@@ -294,13 +307,10 @@ void master(void){
 			break;
 		}
 
-		printf("%d %d \n", actual_data_block, total_sub_imgs);
-
 		if(actual_data_block < total_sub_imgs){
 
 			// Se existe bloco a ser enviado.
 			// Pega o próximo bloco disponívvel e envia para o escravo.
-			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, cpu);
 
 			hr = (struct hdr_info*)sub_image;
 			hr->w = w;
@@ -308,7 +318,11 @@ void master(void){
 
 			// Faz o recorte da imagem.
 			get_sub_matrix(image, sub_image + sizeof(struct hdr_info), height, width, y-2, x-2, h+4, w+4);
+
+			#ifdef DEBUG_MODE
+			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, cpu);
 			matrix_print(sub_image + sizeof(struct hdr_info), h+4, w+4);
+			#endif
 
 			val = hf_sendack(cpu, 1000, sub_image, (h+4) * (w+4) + sizeof(struct hdr_info), 0, 500);
 			if (val)
@@ -322,18 +336,18 @@ void master(void){
 			next_data(bag, bag_offset, &x, &y, &w, &h);
 			actual_data_block++;
 			bag_offset += sizeof(struct data_info);
+		}
 	}
-}
 
-// Finaliza o calculo do tempo de execução.
-time = _readcounter() - time;
-printf("done in %d clock cycles.\n\n", time);
+	// Finaliza o calculo do tempo de execução.
+	time = _readcounter() - time;
+	printf("done in %d clock cycles.\n\n", time);
 
-// Desenha imagem na tela.
-print_image(final_image);
+	// Desenha imagem na tela.
+	print_image(final_image);
 
-printf("\n\nFim do processamento!\n");
-panic(0);
+	printf("\n\nFim do processamento!\n");
+	panic(0);
 
 }
 
@@ -347,18 +361,19 @@ void slave(void){
 		panic(0xff);
 	}
 
-	uint8_t image_size = height * width * 4;
+	uint8_t image_size = height * width;
 
 	// Aloca espaço para recebimento dos dados.
 	uint8_t *sub_image = malloc(image_size);
 
 	// Aloca espaço de memória para as imagem intermediária.
-	uint8_t *sub_image_aux = malloc(image_size);
 
-	if (sub_image_aux == NULL){
-		printf("\nmalloc() failed!\n");
-		panic(0);
-	}
+	uint8_t *temp_matrix = malloc(BLOCK_WIDTH * BLOCK_HEIGHT * 2 + sizeof(struct hdr_info));
+
+//	if (sub_image_aux == NULL){
+	//	printf("\nmalloc() failed!\n");
+	//	panic(0);
+	//}
 
 	while(1) {
 
@@ -369,32 +384,27 @@ void slave(void){
 		//else
 		//	printf("[master] %s (%d bytes)\n", sub_image, size);
 
-		// TODO Faz processamento dos dados.
-
 		struct hdr_info *hr = (struct hdr_info*)sub_image;
 
+		#ifdef DEBUG_MODE
 		printf("Recebido bloco com dimensoes h = %d e w = %d\n", hr->h+4, hr->w+4);
-
-		matrix_print(sub_image + sizeof(struct hdr_info), hr->h+4, hr->w+4);
+		//matrix_print(sub_image + sizeof(struct hdr_info), hr->h+4, hr->w+4);
+		#endif
 
 		// Aplica filtros na imagem.
-		// Note também o uso das imagens intermediárias.
-
-		// TODO Aplica filtros na imagem.
 
 		//do_gaussian(sub_image, sub_image_aux, width, height);
 		//do_sobel(sub_image_aux, sub_image, width, height);
 
-		uint8_t *temp_matrix = malloc((hr->h+4) * (hr->w+4) + sizeof(struct hdr_info));
-
 		memset(temp_matrix, hf_selfid(), (hr->h+4) * (hr->w+4) + sizeof(struct hdr_info));
-
 		memcpy(temp_matrix, sub_image, sizeof(struct hdr_info));
 
 		// Retira as bordas da imagem.
 		//get_sub_matrix(sub_image + sizeof(struct hdr_info), temp_matrix + sizeof(struct hdr_info), hr->h+4, hr->w+4, 2, 2, hr->h, hr->w);
 
-		matrix_print(temp_matrix + sizeof(struct hdr_info), hr->h, hr->w);
+		#ifdef DEBUG_MODE
+		//matrix_print(temp_matrix + sizeof(struct hdr_info), hr->h, hr->w);
+		#endif
 
 		// Envia dados processados.
 		val = hf_sendack(MASTER_NODE, 1000, temp_matrix, hr->h * hr->w + sizeof(struct hdr_info), 0, 500);
@@ -404,7 +414,7 @@ void slave(void){
 
 	}
 
-	free(sub_image_aux);
+	//free(sub_image_aux);
 	panic(0);
 
 }

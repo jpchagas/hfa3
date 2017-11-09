@@ -54,7 +54,10 @@
         </df>
         <df name="img_filter">
           <in>filter.c</in>
+          <in>filterold.c</in>
           <in>image.h</in>
+          <in>matrix.c</in>
+          <in>matrix.h</in>
         </df>
         <df name="lists">
           <in>lists.c</in>
