@@ -1,7 +1,7 @@
 
 KERNEL: booting...
 ===========================================================
-HellfireOS v2.17.03 (4.6.1) [Nov  8 2017, 19:03:47]
+HellfireOS v2.17.03 (4.6.1) [Nov  8 2017, 22:10:28]
 Embedded Systems Group - GSE, PUCRS - [2007 - 2017]
 ===========================================================
 
@@ -15,16 +15,20 @@ HAL: _vm_init()
 HAL: _sched_init()
 HAL: _timer_init()
 HAL: _irq_init()
-KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 10001af0, sp: 10006350, ss: 1024 bytes
+KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 10001bd4, sp: 100064c0, ss: 1024 bytes
 HAL: _device_init()
 KERNEL: this is core 0
 KERNEL: NoC queue init, 64 packets
 KERNEL: NoC driver registered
 HAL: _task_init()
-KERNEL: [master], id: 1, p:0, c:0, d:0, addr: 100006a4, sp: 10008e80, ss: 2048 bytes
+KERNEL: [master], id: 1, p:0, c:0, d:0, addr: 1000071c, sp: 10008ff0, ss: 2048 bytes
 KERNEL: free heap: 487416 bytes
 KERNEL: HellfireOS is up
-x: 0 y: 0 h:3 w:3
+Total de sub-imagens para processamento: 9
+Criando de tamanho 36
+
+
+Enviando bloco 0 para o escravo 1.
 [crop] sub matrix is a 7x7, line -2 column -2
 [print] matrix is a 7x7
 0	0	0	0	0	0	0	
@@ -34,8 +38,9 @@ x: 0 y: 0 h:3 w:3
 0	0	31	32	33	34	35	
 0	0	41	42	43	44	45	
 0	0	51	52	53	54	55	
-Enviando bloco 0 ...
-x: 3 y: 0 h:3 w:3
+0 0 3 3
+
+Enviando bloco 1 para o escravo 2.
 [crop] sub matrix is a 7x7, line -2 column 1
 [print] matrix is a 7x7
 0	0	0	0	0	0	0	
@@ -45,36 +50,9 @@ x: 3 y: 0 h:3 w:3
 32	33	34	35	36	37	38	
 42	43	44	45	46	47	48	
 52	53	54	55	56	57	58	
-Enviando bloco 1 ...
-[print] matrix is a 9x10
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-Pacote recebido ...
-[print] matrix is a 3x3
-1	1	1	
-1	1	1	
-1	1	1	
-idx 0 x 0 y 0 h 3 w 3 
-sub matrix is a 3x3, line 0 column 0
-[print] matrix is a 9x10
-1	1	1	0	0	0	0	0	0	0	
-1	1	1	0	0	0	0	0	0	0	
-1	1	1	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 2 ...
-x: 6 y: 0 h:3 w:4
+3 0 3 3
+
+Enviando bloco 2 para o escravo 3.
 [crop] sub matrix is a 7x8, line -2 column 4
 [print] matrix is a 7x8
 0	0	0	0	0	0	0	0	
@@ -84,25 +62,9 @@ x: 6 y: 0 h:3 w:4
 35	36	37	38	15	20	0	0	
 45	46	47	48	16	20	0	0	
 55	56	57	58	20	20	0	0	
-Pacote recebido ...
-[print] matrix is a 3x3
-1	1	1	
-1	1	1	
-1	1	1	
-idx 1 x 3 y 0 h 3 w 3 
-sub matrix is a 3x3, line 0 column 3
-[print] matrix is a 9x10
-1	1	1	1	1	1	0	0	0	0	
-1	1	1	1	1	1	0	0	0	0	
-1	1	1	1	1	1	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 3 ...
-x: 0 y: 3 h:3 w:3
+6 0 4 3
+
+Enviando bloco 3 para o escravo 4.
 [crop] sub matrix is a 7x7, line 1 column -2
 [print] matrix is a 7x7
 0	0	21	22	23	24	25	
@@ -112,25 +74,9 @@ x: 0 y: 3 h:3 w:3
 0	0	61	62	63	64	65	
 0	0	71	72	73	74	75	
 0	0	81	82	83	84	85	
-Pacote recebido ...
-[print] matrix is a 3x4
-1	1	1	1	
-1	1	1	1	
-1	1	1	1	
-idx 2 x 6 y 0 h 3 w 4 
-sub matrix is a 3x4, line 0 column 6
-[print] matrix is a 9x10
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 4 ...
-x: 3 y: 3 h:3 w:3
+0 3 3 3
+
+Enviando bloco 4 para o escravo 5.
 [crop] sub matrix is a 7x7, line 1 column 1
 [print] matrix is a 7x7
 22	23	24	25	26	27	28	
@@ -140,25 +86,28 @@ x: 3 y: 3 h:3 w:3
 62	63	64	65	66	67	68	
 72	73	74	75	76	77	78	
 82	83	84	85	86	87	88	
-Pacote recebido ...
+3 3 3 3
+
+Recebendo bloco ...
 [print] matrix is a 3x3
 1	1	1	
 1	1	1	
 1	1	1	
-idx 3 x 0 y 3 h 3 w 3 
-sub matrix is a 3x3, line 3 column 0
+[set sub-matrix] sub matrix is a 3x3, line 0 column 0
 [print] matrix is a 9x10
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
 1	1	1	0	0	0	0	0	0	0	
 1	1	1	0	0	0	0	0	0	0	
 1	1	1	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 5 ...
-x: 6 y: 3 h:3 w:4
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+5 9 
+
+
+Enviando bloco 5 para o escravo 1.
 [crop] sub matrix is a 7x8, line 1 column 4
 [print] matrix is a 7x8
 25	26	27	28	20	20	0	0	
@@ -168,25 +117,28 @@ x: 6 y: 3 h:3 w:4
 65	66	67	68	20	20	0	0	
 75	76	77	78	20	20	0	0	
 85	86	87	88	20	20	0	0	
-Pacote recebido ...
+6 3 4 3
+
+Recebendo bloco ...
 [print] matrix is a 3x3
 1	1	1	
 1	1	1	
 1	1	1	
-idx 4 x 3 y 3 h 3 w 3 
-sub matrix is a 3x3, line 3 column 3
+[set sub-matrix] sub matrix is a 3x3, line 0 column 3
 [print] matrix is a 9x10
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	0	0	0	0	
 1	1	1	1	1	1	0	0	0	0	
 1	1	1	1	1	1	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 6 ...
-x: 0 y: 6 h:3 w:3
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+6 9 
+
+
+Enviando bloco 6 para o escravo 2.
 [crop] sub matrix is a 7x7, line 4 column -2
 [print] matrix is a 7x7
 0	0	51	52	53	54	55	
@@ -196,25 +148,28 @@ x: 0 y: 6 h:3 w:3
 0	0	91	92	93	94	95	
 0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	
-Pacote recebido ...
+0 6 3 3
+
+Recebendo bloco ...
 [print] matrix is a 3x4
 1	1	1	1	
 1	1	1	1	
 1	1	1	1	
-idx 5 x 6 y 3 h 3 w 4 
-sub matrix is a 3x4, line 3 column 6
+[set sub-matrix] sub matrix is a 3x4, line 0 column 6
 [print] matrix is a 9x10
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 7 ...
-x: 3 y: 6 h:3 w:3
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+7 9 
+
+
+Enviando bloco 7 para o escravo 3.
 [crop] sub matrix is a 7x7, line 4 column 1
 [print] matrix is a 7x7
 52	53	54	55	56	57	58	
@@ -224,25 +179,28 @@ x: 3 y: 6 h:3 w:3
 92	93	94	95	96	97	98	
 0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	
-Pacote recebido ...
+3 6 3 3
+
+Recebendo bloco ...
 [print] matrix is a 3x3
 1	1	1	
 1	1	1	
 1	1	1	
-idx 6 x 0 y 6 h 3 w 3 
-sub matrix is a 3x3, line 6 column 0
+[set sub-matrix] sub matrix is a 3x3, line 3 column 0
 [print] matrix is a 9x10
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
 1	1	1	0	0	0	0	0	0	0	
 1	1	1	0	0	0	0	0	0	0	
 1	1	1	0	0	0	0	0	0	0	
-Enviandopacote com o bloco 8 ...
-x: 6 y: 6 h:3 w:4
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+8 9 
+
+
+Enviando bloco 8 para o escravo 4.
 [crop] sub matrix is a 7x8, line 4 column 4
 [print] matrix is a 7x8
 55	56	57	58	20	20	0	0	
@@ -252,40 +210,90 @@ x: 6 y: 6 h:3 w:4
 95	96	97	98	20	20	0	0	
 0	0	0	0	0	0	0	0	
 0	0	0	0	0	0	0	0	
-Pacote recebido ...
+6 6 4 3
+
+Recebendo bloco ...
 [print] matrix is a 3x3
 1	1	1	
 1	1	1	
 1	1	1	
-idx 7 x 3 y 6 h 3 w 3 
-sub matrix is a 3x3, line 6 column 3
+[set sub-matrix] sub matrix is a 3x3, line 3 column 3
 [print] matrix is a 9x10
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
-1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	0	0	0	0	
 1	1	1	1	1	1	0	0	0	0	
 1	1	1	1	1	1	0	0	0	0	
-x: 0 y: 9 h:3 w:3
-[crop] sub matrix is a 7x7, line 7 column -2
-[print] matrix is a 7x7
-0	0	81	82	83	84	85	
-0	0	91	92	93	94	95	
-0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	
-0	0	235	140	0	250	81	
-0	0	0	0	0	0	0	
-0	0	0	0	0	0	0	
-Pacote recebido ...
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+9 9 
+
+
+Recebendo bloco ...
 [print] matrix is a 3x4
 1	1	1	1	
 1	1	1	1	
 1	1	1	1	
-idx 8 x 6 y 6 h 3 w 4 
-sub matrix is a 3x4, line 6 column 6
+[set sub-matrix] sub matrix is a 3x4, line 3 column 6
+[print] matrix is a 9x10
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	
+9 9 
+
+
+Recebendo bloco ...
+[print] matrix is a 3x3
+1	1	1	
+1	1	1	
+1	1	1	
+[set sub-matrix] sub matrix is a 3x3, line 6 column 0
+[print] matrix is a 9x10
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	0	0	0	0	0	0	0	
+1	1	1	0	0	0	0	0	0	0	
+1	1	1	0	0	0	0	0	0	0	
+9 9 
+
+
+Recebendo bloco ...
+[print] matrix is a 3x3
+1	1	1	
+1	1	1	
+1	1	1	
+[set sub-matrix] sub matrix is a 3x3, line 6 column 3
+[print] matrix is a 9x10
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	1	1	1	1	
+1	1	1	1	1	1	0	0	0	0	
+1	1	1	1	1	1	0	0	0	0	
+1	1	1	1	1	1	0	0	0	0	
+9 9 
+
+
+Recebendo bloco ...
+[print] matrix is a 3x4
+1	1	1	1	
+1	1	1	1	
+1	1	1	1	
+[set sub-matrix] sub matrix is a 3x4, line 6 column 6
 [print] matrix is a 9x10
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
@@ -296,7 +304,8 @@ sub matrix is a 3x4, line 6 column 6
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
 1	1	1	1	1	1	1	1	1	1	
-done in 13346550 clock cycles.
+Foram recebidas todos os bloco da imagem.
+done in 50967606 clock cycles.
 
 
 

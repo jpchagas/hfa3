@@ -112,7 +112,7 @@ void get_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int
  *
  */
 void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw){
- printf("sub matrix is a %dx%d, line %d column %d\n", bh, bw, k, l);
+ printf("[set sub-matrix] sub matrix is a %dx%d, line %d column %d\n", bh, bw, k, l);
  int16_t i = 0;
  int16_t bindex = 0;
  while (i < bh){

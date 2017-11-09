@@ -4,14 +4,14 @@ MPSoC Report
 MPSoC cycles: 125000001
 WCET: 5000.0000ms
 
-Estimated energy consumption: 0.863727J
+Estimated energy consumption: 0.972228J
 (6 * 20587 gates Plasma CPU core + 16896 gates interconnection structure, CMOS TSMC 0.35um)
-    core 0: 0.172878J
-    core 1: 0.260366J
-    core 2: 0.222338J
-    core 3: 0.208145J
-    core 4: 0.208145J
-    core 5: 0.154361J
+    core 0: 0.231619J
+    core 1: 0.247211J
+    core 2: 0.246949J
+    core 3: 0.246449J
+    core 4: 0.246689J
+    core 5: 0.246867J
        bus: 0.000000J
 
 Flits sent: 0
