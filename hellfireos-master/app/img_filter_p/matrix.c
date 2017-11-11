@@ -62,25 +62,18 @@ void matrix_print_sub(uint8_t *a, int16_t h, int16_t w, int16_t k, int16_t l, in
   *
   */
 
-void get_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t line, int16_t col, int16_t bh, int16_t bw, int16_t L){
-
-	memset(b, 0, bh * bw);
-
-	printf("[crop] sub matrix is a %dx%d, line %d column %d\n", bh, bw, line, col);
-
-	//printf("h=%d w=%d line=%d col=%d bh=%d bw=%d L=%d\n", h, w, line, col, bh, bw, L);
-
+void get_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw){
+	//memset(b, 0, bh * bw);
+	printf("[get] sub matrix is a %dx%d, line %d column %d\n", bh, bw, k, l);
 	int16_t i = 0;
 	int16_t bindex = 0;
-
 	while (i < bh){
-		//printf("---> %d %d\n", bindex, (i + line) * w + col);
-		memcpy(&b[bindex], &a[(i + line) * w + col], bw * sizeof(uint8_t) );
+		memcpy(&b[bindex], &a[(i + k) * w + l], bw*sizeof(uint8_t));
 		i += 1;
     bindex += bw;
   }
-
 }
+
 
 /*
  * Cola uma sub-matriz 'b' em uma matriz 'a'.
@@ -100,7 +93,8 @@ void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int
  int16_t i = 0;
  int16_t bindex = 0;
  while (i < bh){
-   memcpy(&a[(i + k) * w + l], &b[bindex], bw);
+	 //printf("a[%d] = b[%d]\n", (i + k) * w + l, bindex);
+   memcpy(&a[(i + k) * w + l], &b[bindex], bw*sizeof(uint8_t)   );
    i += 1;
    bindex += bw;
  }

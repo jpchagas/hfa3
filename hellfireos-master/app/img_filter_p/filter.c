@@ -1,8 +1,13 @@
- #include "clone_3.h"
+//#include "clone_3.h"
 
+#include "naruto.h"
+
+//#include "r2d2.h"
 //#include "image.h"
 
-#define DEBUG_MODE
+//#include "maca.h"
+
+// #define DEBUG_MODE
 
 #define BLOCK_WIDTH 32
 #define BLOCK_HEIGHT 32
@@ -17,7 +22,7 @@
 #define SLV5_NODE 5
 
 #define L 2
-#define L2 2 * L
+#define L2 4
 
 // Usado para gerencia dos blocos pelo mestre.
 struct data_info {
@@ -29,8 +34,8 @@ struct data_info {
 
 // Header usado na troca de mensagens.
 struct hdr_info {
-	int32_t w;
-	int32_t h;
+	uint8_t w;
+	uint8_t h;
 };
 
 uint8_t gaussian(uint8_t buffer[5][5]){
@@ -43,11 +48,9 @@ uint8_t gaussian(uint8_t buffer[5][5]){
 					{4, 9, 12, 9, 4},
 					{2, 4, 5, 4, 2}
 				};
-	for (i = 0; i < 5; i++){
-		for (j = 0; j < 5; j++){
+	for (i = 0; i < 5; i++)
+		for (j = 0; j < 5; j++)
 			sum += ((int32_t)buffer[i][j] * (int32_t)kernel[i][j]);
-		}
-	}
 	mpixel = (int32_t)(sum / 159);
 
 	return (uint8_t)mpixel;
@@ -171,7 +174,7 @@ uint8_t next_data(int32_t *bag, int32_t offset, int32_t *x, int32_t *y, int32_t 
 	d->w = *w;
 	d->h = *h;
 
-	printf("\n\n\n %d %d %d %d \n\n\n", *x, *y, *w, *h);
+	printf("\n\n\n Coordenadas do bloco enviado - x:%d y:%d w:%d h:%d \n\n\n", *x, *y, *w, *h);
 
 	int32_t diff = 0;
 
@@ -210,7 +213,7 @@ uint8_t next_data(int32_t *bag, int32_t offset, int32_t *x, int32_t *y, int32_t 
 
 void master(void){
 
-	uint32_t i, j, k = 0;
+	uint32_t i;
 
 	uint32_t time;
 	uint16_t cpu, task, size, val;
@@ -222,15 +225,18 @@ void master(void){
 
   // img é a imagem que vai ser processada.
   uint8_t *img = (uint8_t *) malloc((width+L2) * (height+L2));
+	// set bordas com branco.
+	memset(img, 255, (width+L2) * (height+L2) * sizeof(uint8_t));
   set_matrix_borders(image, height, width, img, height+L2, width+L2);
 
-  //matrix_print(img, width+L2, height+L2);
+  matrix_print(img, width+L2, height+L2);
 
+	// Aloca imagem final.
 	uint8_t *final_image = (uint8_t *) malloc(width * height);
+	// Aloca imagem temporária para recebimento.
+	uint8_t *sub_image = (uint8_t *) malloc(width * height);
 
-	uint8_t *sub_image = (uint8_t *) malloc(width * height * 4 + sizeof(struct hdr_info));
-
-	// Total de sub-imagens a serem processadas (total de blocos).
+	// Calcula total de sub-imagens a serem processadas (total de blocos).
 	uint8_t total_sub_imgs = (width / BLOCK_WIDTH) * (height / BLOCK_HEIGHT);
 
 	printf("Total de sub-imagens para processamento: %d\n", total_sub_imgs);
@@ -261,7 +267,7 @@ void master(void){
 			hr->h = h;
 
 			// Faz o recorte da imagem.
-			get_sub_matrix(img, sub_image + sizeof(struct hdr_info), height+L2, width+L2, y, x, h+L2, w+L2, L);
+			get_sub_matrix(img, sub_image + sizeof(struct hdr_info), height+L2, width+L2, y, x, h+L2, w+L2);
 
 			#ifdef DEBUG_MODE
 			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, i);
@@ -323,13 +329,12 @@ void master(void){
 
 			// Se existe bloco a ser enviado.
 			// Pega o próximo bloco disponívvel e envia para o escravo.
-
 			hr = (struct hdr_info*)sub_image;
 			hr->w = w;
 			hr->h = h;
 
 			// Faz o recorte da imagem.
-			get_sub_matrix(img, sub_image + sizeof(struct hdr_info), height+L2, width+L2, y, x, h+L2, w+L2, L);
+			get_sub_matrix(img, sub_image + sizeof(struct hdr_info), height+L2, width+L2, y, x, h+L2, w+L2);
 
 			#ifdef DEBUG_MODE
 			printf("\n\nEnviando bloco %d para o escravo %d.\n", actual_data_block, cpu);
@@ -380,7 +385,7 @@ void slave(void){
 
 	// Aloca espaço de memória para as imagem intermediária.
 
-	uint8_t *temp_matrix = (uint8_t *)malloc(image_size);
+	//uint8_t *temp_matrix = (uint8_t *)malloc(image_size);
 
 	//	if (sub_image_aux == NULL){
 	//	printf("\nmalloc() failed!\n");
@@ -389,6 +394,9 @@ void slave(void){
 
 	uint8_t *img = (uint8_t *) malloc(height * width);
 	uint8_t *img2 = (uint8_t *) malloc(height * width);
+	uint8_t *final = (uint8_t *) malloc(height * width);
+
+	uint8_t ofst = sizeof(struct hdr_info);
 
 	while(1) {
 
@@ -399,35 +407,34 @@ void slave(void){
 		//else
 		//	printf("[master] %s (%d bytes)\n", sub_image, size);
 
+
 		struct hdr_info *hr = (struct hdr_info*)sub_image;
+
+		uint8_t d= (hr->h+L2 * hr->w+L2) * sizeof(uint8_t);
+
+		//memset(img, 0, d);
+		//memset(img2, 0, d);
+		//memset(final, 0, d);
 
 		#ifdef DEBUG_MODE
 		printf("Recebido bloco com dimensoes h = %d e w = %d\n", hr->h+L2, hr->w+L2);
-		matrix_print(sub_image + sizeof(struct hdr_info), hr->h+L2, hr->w+L2);
+		matrix_print(sub_image + ofst, hr->h+L2, hr->w+L2);
 		#endif
 
-		// Aplica filtros na imagem.
+		// Pega a imagem recebida, processa e guarda em img2.
+		do_gaussian(sub_image + ofst, img, hr->w+L2, hr->h+L2);
+  	do_sobel(img, img2, hr->w+L2, hr->h+L2);
 
-		do_gaussian(sub_image + sizeof(struct hdr_info), img, hr->w+L2, hr->h+L2);
-		do_sobel(img, img2, hr->w+L2, hr->h+L2);
+		//do_gaussian(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
 
-		memset(temp_matrix, 0, (hr->w+L2) * (hr->h+L2) + sizeof(struct hdr_info));
+		// Bota cabeçalho.
+    memcpy(final, sub_image, sizeof(struct hdr_info));
 
-    memcpy(temp_matrix, sub_image, sizeof(struct hdr_info));
-    //memcpy(img2, sub_image, sizeof(struct hdr_info));
-
-    // Retira as bordas da imagem.
-		get_sub_matrix(img2, temp_matrix + sizeof(struct hdr_info), hr->h+L2, hr->w+L2, L, L, hr->h, hr->w, L);
-    //get_sub_matrix(sub_image + sizeof(struct hdr_info), img2 + sizeof(struct hdr_info), hr->h+L2, hr->w+L2, L, L, hr->h, hr->w, L);
-
-		#ifdef DEBUG_MODE
-		//matrix_print(img2 + sizeof(struct hdr_info), hr->h, hr->w);
-		#endif
-
-    //val = hf_sendack(MASTER_NODE, 1000, img2, hr->h * hr->w + sizeof(struct hdr_info), 0, 500);
+		// Tira as bordas das imagem img2.
+		get_sub_matrix(img2, final + ofst, hr->h+L2, hr->w+L2, L, L, hr->h, hr->w);
 
 		// Envia dados processados.
-		val = hf_sendack(MASTER_NODE, 1000, temp_matrix, hr->h * hr->w + sizeof(struct hdr_info), 0, 500);
+		val = hf_sendack(MASTER_NODE, 1000, final, hr->h * hr->w + ofst, 0, 500);
 		//if (val){
 		//	printf("sender, hf_sendack(): error %d\n", val);
 		//}
