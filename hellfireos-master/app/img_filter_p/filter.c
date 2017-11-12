@@ -127,9 +127,9 @@ void do_sobel(uint8_t *input, uint8_t *output, int32_t width, int32_t height){
 	uint8_t image_buf[3][3];
 
 	for(i = 0; i < height; i++){
-		if (i > 2 && i < height-3){
+		if (i > 0 && i < height-1){
 			for(j = 0; j < width-1; j++){
-				if (j > 2 && j < width-3){
+				if (j > 0 && j < width-1){
 					for (k = 0; k < 3; k++)
 						for(l = 0; l < 3; l++)
 							image_buf[k][l] = input[(((i + l-1) * width) + (j + k-1))];
@@ -360,6 +360,10 @@ void master(void){
 	time = _readcounter() - time;
 	printf("done in %d clock cycles.\n\n", time);
 
+	#ifdef DEBUG_MODE
+	matrix_print(final_image, height, width);
+	#endif
+
 	// Desenha imagem na tela.
 	print_image(final_image);
 
@@ -425,7 +429,7 @@ void slave(void){
 		do_gaussian(sub_image + ofst, img, hr->w+L2, hr->h+L2);
   	do_sobel(img, img2, hr->w+L2, hr->h+L2);
 
-		//do_gaussian(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
+		// do_gaussian(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
 
 		// Bota cabeçalho.
     memcpy(final, sub_image, sizeof(struct hdr_info));
