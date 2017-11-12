@@ -1,16 +1,13 @@
 //#include "clone_3.h"
-
-#include "naruto.h"
-
+//#include "naruto.h"
 //#include "r2d2.h"
 //#include "image.h"
+#include "maca.h"
 
-//#include "maca.h"
+#define DEBUG_MODE
 
-// #define DEBUG_MODE
-
-#define BLOCK_WIDTH 32
-#define BLOCK_HEIGHT 32
+#define BLOCK_WIDTH 16
+#define BLOCK_HEIGHT 16
 
 #define TOTAL_SLAVES 5
 
@@ -22,7 +19,7 @@
 #define SLV5_NODE 5
 
 #define L 2
-#define L2 4
+#define L2 2 * L
 
 // Usado para gerencia dos blocos pelo mestre.
 struct data_info {
@@ -174,14 +171,15 @@ uint8_t next_data(int32_t *bag, int32_t offset, int32_t *x, int32_t *y, int32_t 
 	d->w = *w;
 	d->h = *h;
 
-	printf("\n\n\n Coordenadas do bloco enviado - x:%d y:%d w:%d h:%d \n\n\n", *x, *y, *w, *h);
+	#ifdef DEBUG_MODE
+	printf("Salvando informacoes do ultimo bloco enviado - x:%d y:%d w:%d h:%d \n\n\n", *x, *y, *w, *h);
+	#endif
 
 	int32_t diff = 0;
 
 	*x += *w;
 
 	if(*x >= width){
-		//printf("----------------_> x Ultrapssou\n\n");
 		*x = 0;
 		// trata y
 		*y += *h;
@@ -196,16 +194,10 @@ uint8_t next_data(int32_t *bag, int32_t offset, int32_t *x, int32_t *y, int32_t 
 				*h = diff;
 		}
 	}else{
-
-		//printf("%d %d\n", width, (*x));
-
 		diff = width - (*x);
-
 		// Diferença é menor que um bloco.
 		if(diff < BLOCK_WIDTH){
-			//printf("------------------> Dif pequena %d %d %d  \n", width, *x, diff);
 			*w = diff;
-
 		}
 	}
 
@@ -226,20 +218,23 @@ void master(void){
   // img é a imagem que vai ser processada.
   uint8_t *img = (uint8_t *) malloc((width+L2) * (height+L2));
 	// set bordas com branco.
-	memset(img, 255, (width+L2) * (height+L2) * sizeof(uint8_t));
-  set_matrix_borders(image, height, width, img, height+L2, width+L2);
-
-  matrix_print(img, width+L2, height+L2);
+	memset(img, 0, (width+L2) * (height+L2) * sizeof(uint8_t));
+  set_matrix_borders(image, height, width, img, height+L2, width+L2, L2);
 
 	// Aloca imagem final.
 	uint8_t *final_image = (uint8_t *) malloc(width * height);
 	// Aloca imagem temporária para recebimento.
 	uint8_t *sub_image = (uint8_t *) malloc(width * height);
 
+	memset(final_image, 255, width * height);
+
 	// Calcula total de sub-imagens a serem processadas (total de blocos).
 	uint8_t total_sub_imgs = (width / BLOCK_WIDTH) * (height / BLOCK_HEIGHT);
 
+	#ifdef DEBUG_MODE
+  matrix_print(img, width+L2, height+L2);
 	printf("Total de sub-imagens para processamento: %d\n", total_sub_imgs);
+	#endif
 
 	// Informações sobre localização dos dados = (x, y, w, h)
 	int32_t *bag = (int32_t *) malloc(total_sub_imgs * sizeof(struct data_info));
@@ -275,7 +270,9 @@ void master(void){
 			#endif
 
 			val = hf_sendack(i, 1000, sub_image, (h+L2) * (w+L2) + sizeof(struct hdr_info), 0, 500);
-			if (val) printf("sender, hf_sendack(): error %d\n", val);
+			if (val){
+				printf("Erro %d ao enviar pacote ao escravo %d.\n", val, cpu);
+			}
 
 			// Atualiza constrole de qual tarefa está atribuido cada dado.
 			bag_control[i] = actual_data_block;
@@ -295,15 +292,18 @@ void master(void){
 	// Loop principal. Espera por respostas e envia mais trabalho para os escravos.
 	while(1) {
 
+		memset(sub_image, 255 , width * height);
+
 		// Recebe os dados processados de um escravo.
 		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
-		if (val)
-			printf("error %d\n", val);
+		if (val){
+			printf("Erro %d ao receber pacote do escravo %d.\n", val, cpu);
+		}
 
 		struct hdr_info *hr = (struct hdr_info*)sub_image;
 
 		#ifdef DEBUG_MODE
-		printf("\n\nRecebendo bloco ...\n");
+		printf("\n\nRecebendo bloco do escravo %d.\n", cpu);
 		matrix_print(sub_image + sizeof(struct hdr_info), hr->h, hr->w);
 		#endif
 
@@ -327,6 +327,8 @@ void master(void){
 
 		if(actual_data_block < total_sub_imgs){
 
+			memset(sub_image, 255 , width * height);
+
 			// Se existe bloco a ser enviado.
 			// Pega o próximo bloco disponívvel e envia para o escravo.
 			hr = (struct hdr_info*)sub_image;
@@ -342,8 +344,9 @@ void master(void){
 			#endif
 
 			val = hf_sendack(cpu, 1000, sub_image, (h+L2) * (w+L2) + sizeof(struct hdr_info), 0, 500);
-			if (val)
-				printf("sender, hf_sendack(): error %d\n", val);
+			if (val){
+				printf("Erro %d ao enviar pacote ao escravo %d.\n", val, cpu);
+			}
 
 			// Atualiza constrole de qual tarefa está atribuido cada dado.
 			// O índice corresponde a tarefa e o valor ao id do dado.
@@ -406,19 +409,17 @@ void slave(void){
 
 		// Recebe os dados.
 		val = hf_recvack(&cpu, &task, sub_image, &size, 0);
-		//if (val)
-		//	printf("error %d\n", val);
-		//else
-		//	printf("[master] %s (%d bytes)\n", sub_image, size);
-
+		if (val){
+			printf("Erro %d ao receber pacote do mestre.\n", val);
+		}
 
 		struct hdr_info *hr = (struct hdr_info*)sub_image;
 
 		uint8_t d= (hr->h+L2 * hr->w+L2) * sizeof(uint8_t);
 
-		//memset(img, 0, d);
-		//memset(img2, 0, d);
-		//memset(final, 0, d);
+		memset(img, 255, d);
+		memset(img2, 255, d);
+		memset(final, 255, d);
 
 		#ifdef DEBUG_MODE
 		printf("Recebido bloco com dimensoes h = %d e w = %d\n", hr->h+L2, hr->w+L2);
@@ -426,22 +427,24 @@ void slave(void){
 		#endif
 
 		// Pega a imagem recebida, processa e guarda em img2.
-		do_gaussian(sub_image + ofst, img, hr->w+L2, hr->h+L2);
-  	do_sobel(img, img2, hr->w+L2, hr->h+L2);
+		//do_gaussian(sub_image + ofst, img, hr->w+L2, hr->h+L2);
+		//do_sobel(img, img2, hr->w+L2, hr->h+L2);
 
-		// do_gaussian(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
+		//do_sobel(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
+		//do_gaussian(sub_image + ofst, img2, hr->w+L2, hr->h+L2);
 
 		// Bota cabeçalho.
     memcpy(final, sub_image, sizeof(struct hdr_info));
 
 		// Tira as bordas das imagem img2.
-		get_sub_matrix(img2, final + ofst, hr->h+L2, hr->w+L2, L, L, hr->h, hr->w);
+		//get_sub_matrix(img2, final + ofst, hr->h+L2, hr->w+L2, L, L, hr->h, hr->w);
+		get_sub_matrix(sub_image + ofst, final + ofst, hr->h+L2, hr->w+L2, L, L, hr->h, hr->w);
 
 		// Envia dados processados.
 		val = hf_sendack(MASTER_NODE, 1000, final, hr->h * hr->w + ofst, 0, 500);
-		//if (val){
-		//	printf("sender, hf_sendack(): error %d\n", val);
-		//}
+		if (val){
+			printf("Erro %d ao enviar pacote para o mestre.\n", val);
+		}
 
 	}
 

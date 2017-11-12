@@ -1,5 +1,5 @@
-#include <hellfire.h>
-#include "clone_3.h"
+// #include <hellfire.h>
+#include "naruto.h"
 // #include "image.h"
 
 uint8_t gaussian(uint8_t buffer[5][5]){

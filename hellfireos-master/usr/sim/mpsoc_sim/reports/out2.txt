@@ -1,7 +1,7 @@
 
 KERNEL: booting...
 ===========================================================
-HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 00:06:15]
+HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 05:35:36]
 Embedded Systems Group - GSE, PUCRS - [2007 - 2017]
 ===========================================================
 
@@ -15,15 +15,36 @@ HAL: _vm_init()
 HAL: _sched_init()
 HAL: _timer_init()
 HAL: _irq_init()
-KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 100021f8, sp: 1000aa90, ss: 1024 bytes
+KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 10001d78, sp: 10006ad0, ss: 1024 bytes
 HAL: _device_init()
 KERNEL: this is core 2
 KERNEL: NoC queue init, 64 packets
 KERNEL: NoC driver registered
 HAL: _task_init()
-KERNEL: [slave2], id: 1, p:0, c:0, d:0, addr: 100008ac, sp: 1000d5c0, ss: 2048 bytes
+KERNEL: [slave2], id: 1, p:0, c:0, d:0, addr: 100002b4, sp: 10009600, ss: 2048 bytes
 KERNEL: free heap: 487416 bytes
 KERNEL: HellfireOS is up
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
+Recebido bloco com dimensoes h = 20 e w = 20
+[print] matrix is a 20x20
+0	0	0	0	0	0	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	0	0	
+d2	cd	c7	be	ba	c2	c3	80	84	be	dd	fb	ff	ff	ff	ff	ff	ff	0	0	
+cf	c7	c2	bb	b4	b9	b7	79	9f	b2	ba	c8	f2	ff	ff	ff	ff	ff	0	0	
+d6	cd	c3	bc	ad	b3	9b	85	b5	b9	c2	c2	c1	eb	ff	ff	ff	ff	0	0	
+dc	d6	d2	c9	b1	af	7a	9f	b7	c1	c9	c8	c6	c3	e7	ff	ff	ff	0	0	
+e0	de	d6	d2	cc	bc	8e	ad	be	c4	c9	c7	c6	be	be	e8	ff	ff	0	0	
+dc	de	dd	d7	d3	ce	ca	c6	c5	c7	c4	c5	bc	bf	ba	ba	f1	ff	0	0	
+de	de	dc	dc	dc	da	d5	d2	d0	cb	cc	c7	c2	bf	ba	b6	c4	ff	0	0	
+e0	d9	dc	da	dc	dc	db	d6	d9	d8	d1	ce	cb	bc	b8	b6	b1	f3	0	0	
+e1	dd	db	d8	de	db	dc	dc	dc	da	d8	d2	ce	c8	bc	b6	b1	de	0	0	
+e5	df	df	dd	df	dc	e0	df	de	dc	db	d6	d0	cc	c9	c0	b1	c5	0	0	
+e4	e2	e2	e5	f7	fb	f5	e3	dd	dc	dc	d9	d1	cd	cd	c6	b8	b8	0	0	
+e4	e2	e1	f9	ff	ff	ff	f9	df	da	d9	da	d2	cd	ca	c6	c0	ba	0	0	
+de	df	e3	fe	fb	da	fc	fe	e2	da	d8	da	d3	cd	c9	c6	bf	bc	0	0	
+dc	da	e1	fe	75	3	80	fe	db	d6	d5	d6	d2	cb	c8	c1	b9	c9	0	0	
+d5	d7	d9	ee	65	3	73	ed	ce	d1	d3	ce	cf	c7	c3	be	b1	de	0	0	
+[get] sub matrix is a 16x16, line 2 column 2
+Erro 65333 ao enviar pacote para o mestre.

@@ -14,7 +14,7 @@ void matrix_print(uint8_t *a, int16_t h, int16_t w){
 	while (i < h){
 		int16_t j = 0;
 		while (j < w){
-			printf("%x\t", a[i * w + j]);
+			printf("%d\t", a[i * w + j]);
 			j += 1;
     }
 		printf("\n");
@@ -89,7 +89,6 @@ void get_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int
  *
  */
 void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int16_t l, int16_t bh, int16_t bw){
-
  printf("[set sub-matrix] sub matrix is a %dx%d, line %d column %d\n", bh, bw, k, l);
  int16_t i = 0;
  int16_t bindex = 0;
@@ -113,13 +112,13 @@ void set_sub_matrix(uint8_t *a, uint8_t *b, int16_t h, int16_t w, int16_t k, int
  * @param bw   Largura da matriz b.
  *
  */
-void set_matrix_borders(uint8_t *a, int16_t ah, int16_t aw, uint8_t *b, int16_t bh, int16_t bw, int16_t L2){
+void set_matrix_borders(uint8_t *a, int16_t ah, int16_t aw, uint8_t *b, int16_t bh, int16_t bw){
 
   int16_t i = 0;
-  int16_t bindex = bw * 2 + L2/2; // Pula primeiras duas linhas e duas posições da borda direita.
+  int16_t bindex = bw * 2 + 2; // Pula primeiras duas linhas e duas posições da borda direita.
   while (i < ah){
     memcpy(&b[bindex], &a[i * aw], aw); // Copia conteúdo da linha.
     i += 1;
-    bindex += aw + L2;	// Pula duas posições da borda esquerda e duas da borda direita.
+    bindex += aw + 4;	// Pula duas posições da borda esquerda e duas da borda direita.
 	}
 }

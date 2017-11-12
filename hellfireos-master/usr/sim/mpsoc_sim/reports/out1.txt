@@ -1,7 +1,7 @@
 
 KERNEL: booting...
 ===========================================================
-HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 00:06:13]
+HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 05:35:35]
 Embedded Systems Group - GSE, PUCRS - [2007 - 2017]
 ===========================================================
 
@@ -15,16 +15,59 @@ HAL: _vm_init()
 HAL: _sched_init()
 HAL: _timer_init()
 HAL: _irq_init()
-KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 100021f8, sp: 1000aa90, ss: 1024 bytes
+KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 10001d78, sp: 10006ad0, ss: 1024 bytes
 HAL: _device_init()
 KERNEL: this is core 1
 KERNEL: NoC queue init, 64 packets
 KERNEL: NoC driver registered
 HAL: _task_init()
-KERNEL: [slave1], id: 1, p:0, c:0, d:0, addr: 100008ac, sp: 1000d5c0, ss: 2048 bytes
+KERNEL: [slave1], id: 1, p:0, c:0, d:0, addr: 100002b4, sp: 10009600, ss: 2048 bytes
 KERNEL: free heap: 487416 bytes
 KERNEL: HellfireOS is up
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
+Recebido bloco com dimensoes h = 20 e w = 20
+[print] matrix is a 20x20
+0	0	0	0	0	0	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	de	db	e1	e2	df	dc	d8	d0	cc	c9	
+0	0	ff	ff	ff	ff	ff	ed	e0	de	e2	de	e1	e0	db	d8	d2	cd	c7	be	
+0	0	ff	ff	ff	ff	ec	da	e1	e2	e5	e4	e3	e0	db	d6	cf	c7	c2	bb	
+0	0	ff	ff	ff	ed	d9	db	d7	d6	d7	df	e0	df	dc	db	d6	cd	c3	bc	
+0	0	ff	ff	f3	d5	d2	d1	d2	d7	da	dc	dd	de	e0	dd	dc	d6	d2	c9	
+0	0	ff	fe	d8	cf	d2	cf	cf	d3	d9	db	dc	dc	e0	e2	e0	de	d6	d2	
+0	0	ff	ec	ca	c8	cd	cd	d0	d3	db	db	d9	dd	dd	df	dc	de	dd	d7	
+0	0	fe	d4	c7	c6	ca	cc	d1	ec	fe	fe	f5	e0	dd	e0	de	de	dc	dc	
+0	0	f0	c5	c0	bc	c5	c8	df	fe	ff	ff	ff	f2	df	e1	e0	d9	dc	da	
+0	0	de	bf	ba	bf	c4	c8	e8	fe	bd	a8	fd	f8	e2	e3	e1	dd	db	d8	
+0	0	d0	bc	b9	c3	c3	c9	e1	ec	b	3	bd	f2	de	e3	e5	df	df	dd	
+0	0	c7	bd	bb	c2	c4	cb	d0	ea	40	25	dc	e0	dc	e4	e4	e2	e2	e5	
+0	0	c0	be	bd	c1	c6	cd	ca	cf	d7	dc	d7	dc	df	e1	e4	e2	e1	f9	
+0	0	c3	ba	bc	c7	c7	cd	cc	ce	d0	d0	d3	d8	d8	db	de	df	e3	fe	
+0	0	c4	bc	bd	c1	c5	c9	c9	cd	d0	d0	d1	d4	d5	d8	dc	da	e1	fe	
+0	0	c4	b9	be	be	c3	c2	c5	cc	d0	cd	cd	d2	d1	d4	d5	d7	d9	ee	
+[get] sub matrix is a 16x16, line 2 column 2
+Erro 65333 ao enviar pacote para o mestre.
+Recebido bloco com dimensoes h = 20 e w = 20
+[print] matrix is a 20x20
+e4	e2	e1	f9	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	
+ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	d1	cc	ca	c1	bc	b6	ae	f2	0	0	
+d5	d0	ce	cd	cd	ce	d0	cd	cf	d0	cf	c9	c5	ba	b8	b1	bb	fe	0	0	
+d1	d0	cc	cd	cc	cc	cc	c9	cb	cb	ca	c4	bd	b7	b7	ae	e1	ff	0	0	
+ca	c9	c9	ca	c7	c7	c7	c8	c6	c4	c0	bb	b7	b7	ad	b7	fd	ff	0	0	
+c3	c5	c4	c3	c4	c0	c0	c1	be	bd	b9	b8	b3	b0	aa	e6	ff	ff	0	0	
+c3	c4	c4	c5	c1	bc	bb	bb	b9	b9	b9	b9	b0	ab	cb	ff	ff	ff	0	0	
+be	be	c1	c1	be	bc	ba	b5	b6	b6	b4	af	a7	c0	fd	ff	ff	ff	0	0	
+bb	b8	bc	b9	bd	bd	b8	b6	b3	b0	ac	a1	bf	fd	ff	ff	ff	ff	0	0	
+bd	b5	b7	b3	ba	b5	b6	af	ad	ad	a4	cb	fe	ff	ff	ff	ff	ff	0	0	
+b7	b1	ab	ad	b3	ab	af	a9	a4	aa	e3	ff	ff	ff	ff	ff	ff	ff	0	0	
+b2	ae	ae	ab	aa	a3	a3	9e	cb	fb	ff	ff	ff	ff	ff	ff	ff	ff	0	0	
+ad	a9	ac	a1	9c	a1	c8	f8	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	0	0	
+a3	9e	a1	bb	db	fc	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	0	0	
+e2	f6	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	ff	0	0	
+0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+[get] sub matrix is a 16x16, line 2 column 2

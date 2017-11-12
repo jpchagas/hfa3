@@ -1,7 +1,7 @@
 
 KERNEL: booting...
 ===========================================================
-HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 00:06:18]
+HellfireOS v2.17.03 (4.6.1) [Nov 12 2017, 05:35:39]
 Embedded Systems Group - GSE, PUCRS - [2007 - 2017]
 ===========================================================
 
@@ -15,15 +15,12 @@ HAL: _vm_init()
 HAL: _sched_init()
 HAL: _timer_init()
 HAL: _irq_init()
-KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 100021f8, sp: 1000aa90, ss: 1024 bytes
+KERNEL: [idle task], id: 0, p:0, c:0, d:0, addr: 10001d78, sp: 10006ad0, ss: 1024 bytes
 HAL: _device_init()
 KERNEL: this is core 4
 KERNEL: NoC queue init, 64 packets
 KERNEL: NoC driver registered
 HAL: _task_init()
-KERNEL: [slave4], id: 1, p:0, c:0, d:0, addr: 100008ac, sp: 1000d5c0, ss: 2048 bytes
+KERNEL: [slave4], id: 1, p:0, c:0, d:0, addr: 100002b4, sp: 10009600, ss: 2048 bytes
 KERNEL: free heap: 487416 bytes
 KERNEL: HellfireOS is up
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
-[get] sub matrix is a 32x32, line 2 column 2
